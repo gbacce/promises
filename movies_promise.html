@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script type="text/javascript">
+
+	var apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=fec8b5ab27b292a68294261bb21b04a5&query=';
+
+
+	// The function that is called below on each loop through map
+
+	function getMovieData(query){
+
+		// Return a promise. This way, the main program expects it to be resolved. Promise methods (like .then and .all) can then be used moving forward.
+
+		return new Promise((resolve,reject)=>{
+			$.getJSON(apiUrl + query,(theData)=>{
+
+				// AJAX has returned the data. Resolve the promise.
+
+				resolve(theData);
+			});
+		})
+	}
+
+	var moviesToSearchFor = [
+		'star wars',
+		'lord of the rings',
+		'rocky',
+		'interstellar',
+		'arthur'
+	]
+
+	// We need an array in which to stash our promises. 
+
+	var movieData = [];
+
+
+	// Loop through moviesToSearchFor one at a time
+	// Send each one to getMovieData
+	// Each one returns a promise
+	// Initially, they will all be pending
+
+	moviesToSearchFor.map((movie)=>{
+		movieData.push(getMovieData(movie));
+	});
+
+	console.log(movieData);
+
+	// Once all promises have been fulfilled, move forward.
+
+	Promise.all(movieData).then((finalMovieData)=>{
+		console.log(finalMovieData)
+	})
+
+	</script>
+
+</head>
+<body>
+
+</body>
+</html>
